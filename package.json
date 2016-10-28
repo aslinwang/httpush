@@ -1,0 +1,18 @@
+{
+  "name": "httpush",
+  "version": "1.0.0",
+  "description": "http push not depend on fis",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aslinwang/httpush.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "gearjs": "0.0.10"
+  },
+  "author": "aslinwang",
+  "license": "ISC"
+}
