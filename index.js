@@ -1,4 +1,4 @@
-var _ = require('gearjs');
+var _ = require('gearjs').util;
 var path = require('path');
 
 function upload(receiver, to, data, release, content, file, callback) {
@@ -44,6 +44,12 @@ module.exports = function(options, modified, total, callback) {
     steps.push(function(next) {
       var _upload = arguments.callee;
 
+      // 目标路径
+      // console.log(file.getHashRelease()) --> /protected/config/wii_ui/aaa/config/chart-map.json
+      // 文件内容
+      // console.log(file.getContent()) --> 
+      // 上传文件的文件名
+      // console.log(file.subpath) --> /aaa/config/chart-map.json
       upload(receiver, to, data, file.getHashRelease(), file.getContent(), file, function(error) {
         if (error) {
           if (options.retry && !--reTryCount) {
@@ -52,7 +58,9 @@ module.exports = function(options, modified, total, callback) {
             _upload();
           }
         } else {
-          next();
+          if(next) {
+            next();
+          }
         }
       });
     });
