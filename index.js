@@ -1,26 +1,36 @@
 var _ = require('gearjs').util;
 var path = require('path');
+var colors = require('colors');
 
 function upload(receiver, to, data, release, content, file, callback) {
   var subpath = file.subpath;
+  var d = new Date();
+  var time = ['[', d.getHours(), ':', d.getMinutes(), ':', d.getSeconds(), ']'].join('');
   data['to'] = _(path.join(to, release));
   _.upload(
       //url, request options, post data, file
       receiver, null, data, content, subpath,
       function(err, res) {
         if (err || res.trim() != '0') {
-          callback('upload file [' + subpath + '] to [' + to + '] by receiver [' + receiver + '] error [' + (err || res) + ']');
+          // callback('upload file [' + subpath + '] to [' + to + '] by receiver [' + receiver + '] error [' + (err || res) + ']');
+          process.stdout.write(
+            ' - '.red.bold +
+            time.grey + ' ' +
+            subpath.red +
+            ' fail '.red +
+            '\n'
+         );
         } else {
           process.stdout.write(
               ' - '.green.bold +
-              ' ' +
+              time.grey + ' ' +
               subpath.replace(/^\//, '') +
               ' >> '.yellow.bold +
               to + release +
               '\n'
           );
-          callback();
         }
+        callback();// 上传失败可继续上传
       }
   );
 }
