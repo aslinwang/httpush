@@ -1,6 +1,6 @@
 {
   "name": "httpush",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "http push not depend on fis",
   "main": "index.js",
   "repository": {

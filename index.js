@@ -12,14 +12,14 @@ function upload(receiver, to, data, release, content, file, callback) {
       receiver, null, data, content, subpath,
       function(err, res) {
         if (err || res.trim() != '0') {
-          // callback('upload file [' + subpath + '] to [' + to + '] by receiver [' + receiver + '] error [' + (err || res) + ']');
-          process.stdout.write(
-            ' - '.red.bold +
-            time.grey + ' ' +
-            subpath.red +
-            ' fail '.red +
-            '\n'
-         );
+          var msg = '' + 
+          ' - '.red.bold +
+          time.grey + ' ' +
+          subpath.replace(/^\//, '').red +
+          ' fail '.red +
+          '\n';
+
+          callback(msg);
         } else {
           process.stdout.write(
               ' - '.green.bold +
@@ -29,8 +29,9 @@ function upload(receiver, to, data, release, content, file, callback) {
               to + release +
               '\n'
           );
+          callback();
         }
-        callback();// 上传失败可继续上传
+        
       }
   );
 }
@@ -63,9 +64,13 @@ module.exports = function(options, modified, total, callback) {
       upload(receiver, to, data, file.getHashRelease(), file.getContent(), file, function(error) {
         if (error) {
           if (options.retry && !--reTryCount) {
-            throw new Error(error);
+            // throw new Error(error);
+            process.stdout.write(error);
+            if(next) {
+              next();
+            }
           } else {
-            _upload();
+            _upload(next);
           }
         } else {
           if(next) {
